@@ -45,9 +45,9 @@ positive_chain = PromptTemplate.from_template(
 
 # Branching logic
 branch = RunnableBranch(
-    (lambda x: isinstance(x["feedback_type"], str) and "negative_airline" in x["feedback_type"].lower(), negative_airline_chain),
-    (lambda x: isinstance(x["feedback_type"], str) and "negative_other" in x["feedback_type"].lower(), negative_other_chain),
-    positive_chain,
+    (lambda x: isinstance(x["feedback_type"], str) and x["feedback_type"].lower() == "negative_airline", negative_airline_chain),
+    (lambda x: isinstance(x["feedback_type"], str) and x["feedback_type"].lower() == "negative_other", negative_other_chain),
+    positive_chain,  # This will handle "positive" classification as a fallback
 )
 
 # Combine classification and branching into full chain
