@@ -1,1 +1,4 @@
 streamlit
+openai==0.28
+langchain==0.0.232
+langchain-core==0.0.56
