@@ -59,14 +59,11 @@ if user_feedback:
         # Run the full chain with user feedback as input
         response = full_chain.invoke({"feedback": user_feedback})
         
-        # Extract and display only the "content" part of the response if available
-        if isinstance(response, dict):
-            main_content = response.get("content", "Unexpected response format.")
+        # Extract and display only the "content" part of the response as a plain string
+        if isinstance(response, dict) and "content" in response:
+            main_content = str(response["content"])  # Explicitly cast to string
             st.write(main_content)
         else:
-            st.write(response)  # Fallback in case the response is not a dictionary
+            st.write("Unexpected response format:", response)  # Fallback in case the response is not structured as expected
     except Exception as e:
         st.error(f"An error occurred while processing your feedback: {e}")
-
-import langchain
-langchain.debug = True
