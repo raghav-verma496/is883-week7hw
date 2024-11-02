@@ -1,8 +1,6 @@
 import streamlit as st
 from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain
-from langchain_core.output_parsers import StrOutputParser
-from langchain_core.runnables import RunnableBranch
 from langchain.chat_models import ChatOpenAI
 
 # Initialize ChatOpenAI with the correct API key
@@ -28,46 +26,29 @@ Feedback:
 
 # Classification chain
 classification_prompt = PromptTemplate(input_variables=["feedback"], template=classification_template)
-classification_chain = LLMChain(llm=llm, prompt=classification_prompt, output_parser=StrOutputParser())
+classification_chain = LLMChain(llm=llm, prompt=classification_prompt)
 
-# Response chains for feedback types
-negative_airline_chain = PromptTemplate.from_template(
-    "We apologize for the inconvenience caused by our services. Our customer service team will contact you shortly."
-) | llm
-
-negative_other_chain = PromptTemplate.from_template(
-    "We're sorry for the inconvenience. However, the situation was beyond our control. We appreciate your understanding."
-) | llm
-
-positive_chain = PromptTemplate.from_template(
-    "Thank you for your positive feedback! We're glad you had a great experience with us."
-) | llm
-
-# Branching logic
-branch = RunnableBranch(
-    (lambda x: isinstance(x["feedback_type"], str) and x["feedback_type"].lower() == "negative_airline", negative_airline_chain),
-    (lambda x: isinstance(x["feedback_type"], str) and x["feedback_type"].lower() == "negative_other", negative_other_chain),
-    positive_chain,  # This will handle "positive" classification as a fallback
-)
-
-# Combine classification and branching into full chain
-full_chain = {"feedback_type": classification_chain, "feedback": lambda x: x["feedback"]} | branch
+# Manually define the responses
+negative_airline_response = "We apologize for the inconvenience caused by our services. Our customer service team will contact you shortly."
+negative_other_response = "We're sorry for the inconvenience. However, the situation was beyond our control. We appreciate your understanding."
+positive_response = "Thank you for your positive feedback! We're glad you had a great experience with us."
 
 # Run the chain if user feedback is provided
 if user_feedback:
     try:
-        # Execute the chain and get response
-        response = full_chain.invoke({"feedback": user_feedback})
-
-        # Debug: Show classification result
+        # Get classification result
         classification_result = classification_chain.run({"feedback": user_feedback})
         st.write("Classification result:", classification_result)
-        
-        # Check if the response is an AIMessage object and display its content
-        if hasattr(response, "content"):
-            st.write(response.content)
+
+        # Display the appropriate response based on classification
+        if classification_result == "negative_airline":
+            st.write(negative_airline_response)
+        elif classification_result == "negative_other":
+            st.write(negative_other_response)
+        elif classification_result == "positive":
+            st.write(positive_response)
         else:
-            st.write("Unexpected response format:", response)  # Fallback for unexpected types
+            st.write("Unexpected classification result:", classification_result)  # Fallback for unexpected results
             
     except Exception as e:
         st.error(f"An error occurred while processing your feedback: {e}")
