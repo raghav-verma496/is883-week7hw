@@ -59,10 +59,11 @@ if user_feedback:
         # Run the full chain with user feedback as input
         response = full_chain.invoke({"feedback": user_feedback})
         
-        # Extract and display only the "content" part of the response
-        if isinstance(response, dict) and "content" in response:
-            st.write(response["content"])
+        # Extract and display only the "content" part of the response if available
+        if isinstance(response, dict):
+            main_content = response.get("content", "Unexpected response format.")
+            st.write(main_content)
         else:
-            st.write(response)  # Fallback in case the response is not structured as expected
+            st.write(response)  # Fallback in case the response is not a dictionary
     except Exception as e:
         st.error(f"An error occurred while processing your feedback: {e}")
