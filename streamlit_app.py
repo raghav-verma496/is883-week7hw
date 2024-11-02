@@ -5,7 +5,9 @@ from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnableBranch
 from langchain.chat_models import ChatOpenAI
 
+### Load your API Key
 my_secret_key = st.secrets['IS883-OpenAIKey-RV']
+openai.api_key = my_secret_key
 
 # Initialize the OpenAI LLM with gpt-4o-mini model using the API key from secrets
 llm = ChatOpenAI(openai_api_key=st.secrets["IS883-Week7-Key"], model="gpt-4o-mini")
