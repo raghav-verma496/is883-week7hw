@@ -54,12 +54,12 @@ branch = RunnableBranch(
 ### Combine classification and branching in the full chain
 full_chain = {"feedback_type": classification_chain, "feedback": lambda x: x["feedback"]} | branch
 
-# Run the chains if user feedback is provided
-if user_feedback:
-    try:
-        # Run the full chain with user feedback as input and display the output
-        response = full_chain.invoke({"feedback": user_feedback})
-        st.write(response)
-    except Exception as e:
-        st.error(f"An error occurred while processing your feedback: {e}")
+response = full_chain.invoke({"feedback": user_feedback})
+
+# Extract and display only the "content" part of the response
+if isinstance(response, dict) and "content" in response:
+    st.write(response["content"])
+else:
+    st.write(response)
+
 
