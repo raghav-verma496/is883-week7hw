@@ -59,9 +59,11 @@ if user_feedback:
         # Execute the chain and get response
         response = full_chain.invoke({"feedback": user_feedback})
         
-        # Extract "content" field directly and display it
-        main_content = response.get("content", "Error: Content not found")
-        st.write(main_content)
-        
+        # Check if the response is an AIMessage object and display its content
+        if hasattr(response, "content"):
+            st.write(response.content)
+        else:
+            st.write("Unexpected response format:", response)  # Fallback for unexpected types
+            
     except Exception as e:
         st.error(f"An error occurred while processing your feedback: {e}")
