@@ -58,6 +58,10 @@ if user_feedback:
     try:
         # Execute the chain and get response
         response = full_chain.invoke({"feedback": user_feedback})
+
+        # Debug: Show classification result
+        classification_result = classification_chain.run({"feedback": user_feedback})
+        st.write("Classification result:", classification_result)
         
         # Check if the response is an AIMessage object and display its content
         if hasattr(response, "content"):
