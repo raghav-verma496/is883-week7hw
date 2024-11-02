@@ -5,7 +5,7 @@ from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnableBranch
 from langchain.chat_models import ChatOpenAI
 
-# Initialize the OpenAI LLM with gpt-4o-mini model using the API key from secrets
+# Initialize the OpenAI LLM with gpt-4o-mini model using the updated API key from secrets
 llm = ChatOpenAI(openai_api_key=st.secrets["IS883-OpenAIKey-RV"], model="gpt-4o-mini")
 
 # Streamlit app setup
