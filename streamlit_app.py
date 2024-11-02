@@ -67,3 +67,6 @@ if user_feedback:
             st.write(response)  # Fallback in case the response is not a dictionary
     except Exception as e:
         st.error(f"An error occurred while processing your feedback: {e}")
+
+import langchain
+langchain.debug = True
