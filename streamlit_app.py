@@ -14,10 +14,10 @@ st.title("Airline Experience Feedback")
 # User feedback input
 user_feedback = st.text_input("Share with us your experience of the latest trip.", "")
 
-# Template to classify feedback type
+# Refined template to classify feedback type
 classification_template = """Classify the feedback into one of the following categories:
-1. "negative_airline" if the feedback is negative and caused by the airline (e.g., lost luggage).
-2. "negative_other" if the feedback is negative but not caused by the airline (e.g., weather delay).
+1. "negative_airline" if the feedback is negative and specifically related to services provided by the airline (e.g., lost luggage, bad food, rude staff, delayed baggage).
+2. "negative_other" if the feedback is negative but due to reasons beyond the airline's control (e.g., weather delay, security checkpoint delay, airport infrastructure issues).
 3. "positive" if the feedback is positive.
 
 Please respond with only one word: "negative_airline", "negative_other", or "positive".
